@@ -3,7 +3,7 @@
   <img src="https://i.imgur.com/SzkqPPy.png" />
 </p>
 
-https://github.com/MO7YW4NG/CYCU-iLearning-Score-Analyzer/assets/66549438/97c7dfcf-4db1-4eb9-927a-aaa667b8e59e
+https://github.com/MO7YW4NG/CYCU-iLearning-Score-Analyzer/assets/66549438/4dbe1306-d41c-42e3-b3fd-427023a04f95
 
 ## 介紹
 此程式協助你查看每個科目的成績分項詳細數據
