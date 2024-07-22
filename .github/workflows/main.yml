@@ -42,7 +42,7 @@ jobs:
     
     - name: Create Linux Tarball
       if: matrix.os == 'ubuntu-latest'
-      run: python setup.py sdist --formats=gztar
+      run: python setup.py bdist_appimage
     
     - name: Upload Windows artifact
       if: matrix.os == 'windows-latest'
@@ -63,7 +63,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: linux-package
-        path: dist/*.tar.gz
+        path: dist/*.AppImage
     
     - name: Debug - List workspace contents
       if: always()
