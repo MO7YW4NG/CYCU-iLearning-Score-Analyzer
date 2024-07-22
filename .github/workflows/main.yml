@@ -10,12 +10,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [windows-latest, macos-latest]
-        include:
-          - os: windows-latest
-            output: exe
-          - os: macos-latest
-            output: dmg
+        os: [windows-latest, macos-latest, ubuntu-latest]
     
     runs-on: ${{ matrix.os }}
     
@@ -40,14 +35,34 @@ jobs:
       if: matrix.os == 'windows-latest'
       run: python setup.py bdist_msi
     
-    - name: Create macOS DMG
+    - name: Create macOS app bundle
       if: matrix.os == 'macos-latest'
-      run: python setup.py bdist_dmg
-  
-    - name: Upload artifact
+      run: |
+        python setup.py bdist_mac
+        cd dist
+        zip -r YourAppName.zip YourAppName.app
+    
+    - name: Create Linux Tarball
+      if: matrix.os == 'ubuntu-latest'
+      run: python setup.py sdist --formats=gztar
+    
+    - name: Upload Windows artifact
+      if: matrix.os == 'windows-latest'
       uses: actions/upload-artifact@v2
       with:
-        name: installer-${{ matrix.os }}
-        path: |
-          dist/*.msi
-          dist/*.dmg
+        name: windows-installer
+        path: dist/*.msi
+    
+    - name: Upload macOS artifact
+      if: matrix.os == 'macos-latest'
+      uses: actions/upload-artifact@v2
+      with:
+        name: macos-app
+        path: dist/*.zip
+    
+    - name: Upload Linux artifact
+      if: matrix.os == 'ubuntu-latest'
+      uses: actions/upload-artifact@v2
+      with:
+        name: linux-package
+        path: dist/*.tar.gz
