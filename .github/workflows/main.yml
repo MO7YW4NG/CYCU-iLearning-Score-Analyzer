@@ -35,10 +35,10 @@ jobs:
       if: matrix.os == 'windows-latest'
       run: python setup.py bdist_msi
     
-    - name: Create macOS app bundle
+    - name: Create macOS dmg
       if: matrix.os == 'macos-latest'
       run: |
-        python setup.py bdist_mac
+        python setup.py bdist_dmg
     
     - name: Create Linux Tarball
       if: matrix.os == 'ubuntu-latest'
@@ -56,7 +56,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: macos-app
-        path: dist/*.app
+        path: dist/*.dmg
     
     - name: Upload Linux artifact
       if: matrix.os == 'ubuntu-latest'
