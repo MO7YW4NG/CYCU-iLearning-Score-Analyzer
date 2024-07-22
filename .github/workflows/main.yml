@@ -10,14 +10,12 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
+        os: [windows-latest, macos-latest]
         include:
           - os: windows-latest
             output: exe
           - os: macos-latest
             output: dmg
-          - os: ubuntu-latest
-            output: deb
     
     runs-on: ${{ matrix.os }}
     
@@ -45,15 +43,7 @@ jobs:
     - name: Create macOS DMG
       if: matrix.os == 'macos-latest'
       run: python setup.py bdist_dmg
-    
-    - name: Create Linux DEB
-      if: matrix.os == 'ubuntu-latest'
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y python3-dev
-        pip install stdeb
-        python setup.py --command-packages=stdeb.command bdist_deb
-    
+  
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
@@ -61,4 +51,3 @@ jobs:
         path: |
           dist/*.msi
           dist/*.dmg
-          deb_dist/*.deb
