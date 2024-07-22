@@ -39,8 +39,6 @@ jobs:
       if: matrix.os == 'macos-latest'
       run: |
         python setup.py bdist_mac
-        cd dist
-        zip -r YourAppName.zip YourAppName.app
     
     - name: Create Linux Tarball
       if: matrix.os == 'ubuntu-latest'
