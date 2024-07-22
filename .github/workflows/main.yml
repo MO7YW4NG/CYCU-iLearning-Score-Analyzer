@@ -38,7 +38,7 @@ jobs:
     - name: Create macOS app bundle
       if: matrix.os == 'macos-latest'
       run: |
-        python setup.py bdist_mac
+        python setup.py bdist_dmg
     
     - name: Create Linux Tarball
       if: matrix.os == 'ubuntu-latest'
@@ -56,7 +56,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: macos-app
-        path: build/*.app
+        path: dist/*.dmg
     
     - name: Upload Linux artifact
       if: matrix.os == 'ubuntu-latest'
