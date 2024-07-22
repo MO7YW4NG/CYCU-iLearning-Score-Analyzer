@@ -16,6 +16,10 @@ setup(
     options={'build_exe': {
         'packages': ['aiohttp','getpass','os','hashlib','base64','asyncio','Crypto','bs4','rich'],
         'include_files': ['icon.ico']
-    },'bdist_msi': {'initial_target_dir': r'[DesktopFolder]\\CYCU-iLearning-Score-Analyzer'}},
+    },'bdist_msi': {'initial_target_dir': r'[DesktopFolder]\\CYCU-iLearning-Score-Analyzer'},
+      'bdist_mac': {
+            'bundle_name': 'CYCU-iLearning-Score-Analyzer',
+            'iconfile': 'icon.ico',
+        },},
     executables=[target],
 )
