@@ -33,17 +33,21 @@ async def fetch_login_key(session):
                 return res.split("loginForm.login_key.value = \"")[1].split("\"")[0]
 
 async def login(session, id, pwd, loginKey) -> bool:
-    async with session.post(f"{url}/login.php", headers=headers, data={
-        "username": id,
-        "pwd": pwd,
-        "password": "*" * len(pwd),
-        "login_key": loginKey,
-        "encrypt_pwd": des_encode(md5_encode(pwd)[:4] + loginKey[:4], pwd + " " * (16 - len(pwd) % 16) if len(pwd) % 16 != 0 else pwd),
-    }) as response:
-        res = await response.text()
-        if "lang=\"big5" in res:
-            print("登入失敗，請重新再試!")
-            return False
+    try:
+        async with session.post(f"{url}/login.php", headers=headers, data={
+            "username": id,
+            "pwd": pwd,
+            "password": "*" * len(pwd),
+            "login_key": loginKey,
+            "encrypt_pwd": des_encode(md5_encode(pwd)[:4] + loginKey[:4], pwd + " " * (16 - len(pwd) % 16) if len(pwd) % 16 != 0 else pwd),
+        }, timeout=3 ) as response:
+            res = await response.text()
+            if "lang=\"big5" in res:
+                print("登入失敗，請重新再試!")
+                return False
+    except Exception as e:
+        print("登入失敗，請重新再試!")
+        return False
     return True
 
 async def fetch_courses(session):
@@ -51,7 +55,7 @@ async def fetch_courses(session):
         soup = BeautifulSoup(await response.text(), 'lxml')
         courses = {
             option["value"]: option.text
-            for child in soup.select("optgroup[label=\"正式生、旁聽生\"]")
+            for child in soup.select("optgroup[label^=\"正式生、旁聽生\"]")
             for option in child.find_all("option")
         }
         return courses
@@ -99,11 +103,9 @@ async def main():
             courses = await fetch_courses(session)
             
             while(True):
-                i = 0
-                courseKeys = list(courses.keys())
-                for i in range(len(courseKeys)):
-                    console.print("[cyan3]"+ str(i) + ": "+ courses[courseKeys[i]])
-                    i +=1
+                courseKeys = list(reversed(courses.keys()))
+                for i, key in enumerate(courseKeys):
+                    console.print("[cyan3]"+ str(i) + ": "+ courses[key])
                 
                 console.print("[dark_cyan]輸入編號選擇課程")
                 
@@ -126,11 +128,9 @@ async def main():
                     console.input('[dark_cyan]找不到任何成績項目...')
                     continue
                 
-                i = 0
                 gradeKeys = list(grades.keys())
-                for i in range(len(gradeKeys)):
+                for i, key in enumerate(gradeKeys):
                     console.print("[cyan3]"+ str(i) + ": "+ grades[gradeKeys[i]])
-                    i +=1
                 
                 console.print("[dark_cyan]輸入編號選擇項目")
                 
@@ -177,8 +177,8 @@ async def main():
                 console.print(f'[bright_green]你的分數: [green]{selfGrade[gradeIndex]}')
                 console.print(f'[bright_green]你的PR: [green]{"%.2f" % pr_value}')
                 console.print(f'[bright_green]平均數: [green]{"%.2f" % statistics.mean(scores)}')
-                console.print(f'[bright_green]中位數: [green]{"%.2f" %statistics.median(scores)}')
-                console.print(f'[bright_green]標準差: [green]{"%.3f" %statistics.stdev(scores)}')
+                console.print(f'[bright_green]中位數: [green]{"%.2f" % statistics.median(scores)}')
+                console.print(f'[bright_green]標準差: [green]{"%.3f" % statistics.stdev(scores)}')
                 console.print(f'[bright_green]最高分: [green]{max_grade}')
                 console.print(f'[bright_green]最低分: [green]{min_grade}')
                 console.print(f'[bright_green]全距: [green]{range_grade}')

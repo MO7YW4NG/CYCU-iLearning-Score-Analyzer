@@ -10,7 +10,7 @@ target = Executable(
 
 setup(
     name="CYCU-iLearning-Score-Analyzer",
-    version="1.0",
+    version="1.1",
     description="cycu-ilearning-score-analyzer",
     author="MO7YW4NG",
     options={'build_exe': {
