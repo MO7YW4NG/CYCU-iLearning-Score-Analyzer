@@ -7,6 +7,8 @@ https://github.com/MO7YW4NG/CYCU-iLearning-Score-Analyzer/assets/66549438/4dbe13
 
 ## 介紹
 此程式協助你查看每個科目的成績分項詳細數據
+
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/MO7YW4NG/CYCU-iLearning-Score-Analyzer/total)
 ## 使用方法
 
 1. [下載 msi 安裝檔](https://github.com/MO7YW4NG/CYCU-iLearning-Score-Analyzer/releases)
